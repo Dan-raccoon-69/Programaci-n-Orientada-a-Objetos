@@ -43,7 +43,7 @@ public class Cuenta {
     }
 
     public String mostrarDatosCuenta() {
-        return "Numero de cuenta: " + numeroCuenta + "\nSaldo: " + saldo;
+        return "\nNumero de cuenta: " + numeroCuenta + "\nSaldo: " + saldo;
     }
 
 }

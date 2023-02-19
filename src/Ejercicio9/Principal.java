@@ -17,9 +17,12 @@ import javax.swing.JOptionPane;
 public class Principal {
 
     public static void main(String[] args) {
-        int numCuenta, x, opcion;
+        int numCuenta, x, opcion, numCuentaSeleccionado, opcion2;
         double saldo, saldoIngresado, saldoaRetirar;
-        String tamanioCuenta;
+        String tamanioCuenta, nombre, apellido, DNI;
+
+        // Datos cliente
+        Cliente cliente1 = new Cliente("Armando", "Sanchez", "PUJE45786QFTBTLQ4");
 
         // Inicializando X numero de cuentas segun el usuario
         x = Integer.parseInt(JOptionPane.showInputDialog("¿Cuantas cuentas deseas tener?"));
@@ -37,31 +40,50 @@ public class Principal {
             cuentas[i] = new Cuenta(numCuenta, saldo);
         }
 
-        //
-        
-        Cliente cliente1 = new Cliente("Daniel", "De La Cruz", "CUBD037896KLRPTQG0");
-
-        // Menu de acciones
         do {
-            opcion = Integer.parseInt(JOptionPane.showInputDialog("1. Consultar Saldo\n2. Ingresar Saldo\n3. Retirar Saldo"
-                    + "\n4. Salir\nSelecciona la opcion deseada:"));
-            switch (opcion) {
-                case 1 -> System.out.println("Saldo Actual: " + cuentas[0].consultarSaldo());
-                case 2 -> {
-                    do {
-                        saldoIngresado = Double.parseDouble(JOptionPane.showInputDialog("Ingresa el Saldo: \nMonto minimo: $100"));
-                    } while (saldoIngresado <= 99);
-                    cuentas[0].ingresarSaldo(saldoIngresado);
-                }
-                case 3 -> {
-                    do {
-                        saldoaRetirar = Double.parseDouble(JOptionPane.showInputDialog("Monto a retirar: "));
-                    } while (saldoaRetirar <= 99);
-                    cuentas[0].retirarSaldo(saldoaRetirar);
-                }
-                default -> System.out.println("Opcion erronea");
-            }
-        } while (opcion != 4);
+            numCuentaSeleccionado = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de cuenta que desea manupular"
+                    + "\n6 digitos"));
 
+            int indice = elegirCuenta(cuentas, numCuentaSeleccionado);
+            if (indice == -1) {
+                System.out.println("Numero de cuenta no encontrado\nVerifique su numero de cuenta.");
+            } else {
+                do {
+                    opcion = Integer.parseInt(JOptionPane.showInputDialog("1. Consultar Datos\n2. Ingresar Saldo\n3. Retirar Saldo"
+                            + "\n4. Salir\nSelecciona la opcion deseada:"));
+                    switch (opcion) {
+                        case 1 ->
+                            System.out.println("\nDatos cliente:"
+                                    + "\n" + cliente1.mostrarDatosCliente()
+                                    + "\nDatos Cuenta:" + cuentas[indice].mostrarDatosCuenta());
+                        case 2 -> {
+                            do {
+                                saldoIngresado = Double.parseDouble(JOptionPane.showInputDialog("Ingresa el Saldo: \nMonto minimo: $100"));
+                            } while (saldoIngresado <= 99);
+                            cuentas[indice].ingresarSaldo(saldoIngresado);
+                        }
+                        case 3 -> {
+                            do {
+                                saldoaRetirar = Double.parseDouble(JOptionPane.showInputDialog("Monto a retirar: "));
+                            } while (saldoaRetirar <= 99);
+                            cuentas[indice].retirarSaldo(saldoaRetirar);
+                        }
+                    }
+                } while (opcion != 4);
+            }
+            opcion2 = Integer.parseInt(JOptionPane.showInputDialog("Salir: \nSi: 0 \nNo: 1"));
+        } while (opcion2 == 1);
+
+    }
+
+    public static int elegirCuenta(Cuenta cuentas[], int numCuenta) {
+        int indice = -1;
+        for (int i = 0; i < cuentas.length; i++) {
+            if (numCuenta == cuentas[i].getNumeroCuenta()) {
+                indice = i;
+                break;
+            }
+        }
+        return indice;
     }
 }
